@@ -1,0 +1,456 @@
+
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<title>Hewo ^_^</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+/* --- Ogólne --- */
+*{box-sizing:border-box}
+body{margin:0;font-family:Tahoma, Verdana, Arial;background:url("https://media1.tenor.com/m/8X6lieAy46cAAAAd/microhard-bliss-grass.gif") center center fixed;background-size:cover;overflow:hidden}
+.desktop{position:relative;width:100%;height:calc(100vh - 40px)}
+
+/* --- © Radosław G --- */
+.desktop-icon{position:absolute;width:90px;text-align:center;color:#fff;font-size:13px;cursor:pointer;user-select:none;}
+.desktop-icon img{width:48px;height:48px;display:block;margin:0 auto 4px auto}
+.desktop-icon span{display:block;text-shadow:1px 1px 2px #000}
+
+/* --- © 0day_cat0 --- */
+#taskbar{position:fixed;left:0;right:0;bottom:0;height:40px;background:linear-gradient(#3a6ea5,#1d3b63);display:flex;align-items:center;justify-content:space-between;padding:0 8px;z-index:1000}
+#taskbar .left{display:flex;align-items:center;gap:8px}
+#startBtn{background:linear-gradient(#0a8000,#00b200);border:2px solid #004d00;border-radius:4px;color:#fff;padding:5px 10px;cursor:pointer;font-weight:bold}
+#taskIcons{display:flex;gap:6px}
+.task-icon{width:32px;height:32px;border-radius:4px;display:flex;align-items:center;justify-content:center;background:#cce0ff;border:2px solid #2e5ca7;cursor:pointer}
+#clock{color:#fff;font-weight:bold;text-shadow:1px 1px 2px #000}
+
+#startMenu{position:fixed;bottom:40px;left:0;width:240px;background:#cce0ff;border:2px solid #2e5ca7;box-shadow:3px 3px 8px #0008;border-radius:4px;padding:6px;display:none;z-index:1500}
+#startMenu h3{margin:6px 8px;color:#003a80}
+#startMenu ul{list-style:none;padding:0;margin:0}
+#startMenu li{padding:6px 8px;cursor:pointer;border-radius:4px;font-weight:bold;color:#003a80}
+#startMenu li:hover{background:linear-gradient(#0a64d0,#60a0ff);color:#fff}
+#shutdown{background:#c62828;color:#fff;border:none;padding:6px 8px;border-radius:4px;cursor:pointer;font-weight:bold}
+
+.window{position:absolute;width:540px;height:360px;background:#c0d0ff;border:2px solid #3a6ea5;border-radius:6px;box-shadow:0 0 25px #002f80;display:none;flex-direction:column;overflow:hidden}
+.titlebar{height:32px;background:linear-gradient(#4f81d9,#2f5fa5);color:#fff;padding:0 8px;display:flex;align-items:center;justify-content:space-between;cursor:move;font-weight:bold}
+.titlebar .btns button{margin-left:6px;width:24px;height:24px;border-radius:4px;border:2px solid #2e5ca7;background:linear-gradient(#f1f6ff,#9ac8ff);cursor:pointer}
+.content{flex:1;padding:10px;background:#fff;overflow:auto}
+#ieContent img{max-width:100%;height:auto;border:4px solid #fff}
+
+#paintCanvas{width:100%;height:100%;background:#fff;display:block}
+.toolbar{display:flex;gap:8px;align-items:center;margin-bottom:8px}
+.color-swatch{width:20px;height:20px;border:1px solid #444;cursor:pointer}
+#notepadArea{width:100%;height:100%;border:0;outline:0;font-family:Consolas,monospace;font-size:14px}
+#saperBoard{display:inline-block}
+.saper-row{display:flex}
+.saper-cell{width:32px;height:32px;border:1px solid #446;background:#aac;display:flex;align-items:center;justify-content:center;cursor:pointer;font-weight:bold}
+
+/* Snake */
+#snakeCanvas{background:#000;display:block}
+.folder-list{display:flex;flex-direction:column;gap:8px}
+.folder-item{padding:6px;border:1px solid #ddd;background:#f6f6f6;border-radius:4px;cursor:pointer}
+@media (max-width:700px){.window{width:90%;height:65%}}
+</style>
+</head>
+<body>
+
+<div class="desktop" id="desktop">
+  <!-- Twoje oryginalne okna: Początek, O mnie, Gry -->
+  <div id="home" class="window" style="left:60px;top:60px;">
+    <div class="titlebar"><span>Początek</span><div class="btns"><button onclick="minimizeWindow('home')">_</button><button onclick="maximizeWindow('home')">□</button><button onclick="closeWindow('home')">X</button></div></div>
+    <div class="content">
+      <h2>Hejo w moim "windowsie XP" :3</h2>
+      <h3>możesz tą i inne aplikację schować przesunąć i powiększyć na cały ekran :3</h3>
+      <p>kliknij w poniższe aby otwoić kolejne aplikacje które mówią o mnie ^^</p>
+      <p>są piosenki w "Folder" które moożesz sobie posłuchać :3</p>
+      <button onclick="openWindow('about')">O mnie</button>
+     <p>©Radosław G</p>
+    </div>
+  </div>
+
+  <div id="about" class="window" style="left:140px;top:140px;">
+    <div class="titlebar"><span>O mnie</span><div class="btns"><button onclick="minimizeWindow('about')">_</button><button onclick="maximizeWindow('about')">□</button><button onclick="closeWindow('about')">X</button></div></div>
+    <div class="content">
+      <h2>Hejo!</h2>
+      <p>Mam na imię Radek interesuje się informatyką i budowaniem komuterów i ich naprawianiem.</p>
+      <p>często naprawiam komputery i nie tylko, lubię pomagać innym ludziom w jaki kolwiek możliwy sposób jaki mogę ale jestem overthinker i czasami mogę się zapytać za dużo przez co mogę spowodować że druga osoba może się poczuć nie komfortowo 3:</p>
+      <p>jestem introwertykiem lecz lubię rozmawiać z ludżmi, nie lubię gdy jest zbyt głośno lub zbyt tłocznie, nie wiem czemu ale prawie zawsze się martwię o swoich znajomych. Lubię styl Frutiger Aero i retro stron z lat 2000 bardzo lubię też i muzykę elektroniczną, rock i metal w sumie to lubię prawie wszystkie gatunki muzyczne oprócz rapu mam złe wspomnienia z rapem.</p>
+      <p>lubię kodować (ale nie zawsze), oglądać różne filmy i seriale tylko muszę je oglądać z kimś bo za bardzo samemu nie lubię oglądać czuje się w tedy samotnie i pusto gdy to oglądam</p>
+      <p>moim ulubionym filmem jest "Harry Potter i kamień filozoficzny" i moim ulubionym serialem jest Rick and Morty tak samo jak wyspa totalnej porażki. Bardzo fajnie się mi je oglądało kiedyś ale teraz są słabo dostępne 3:</p>
+      <p>mam dysleksje i często się mylę w pisaniu i czytaniu więc jak będę z tobą pisał i zrobię błąd proszę nie wytykaj tego palcem że ten błąd zrobiłem to bardzo nie miłe </p>
+      <p>Bardzo dziękuje za przeczytanie życzę tobie miłego dnia :3</p>
+     <p>©Radosław G</p>
+    </div>
+  </div>
+
+  <div id="games" class="window" style="left:220px;top:220px;">
+    <div class="titlebar"><span>Gry które lubię :</span><div class="btns"><button onclick="minimizeWindow('games')">_</button><button onclick="maximizeWindow('games')">□</button><button onclick="closeWindow('games')">X</button></div></div>
+    <div class="content">
+      <ul>
+         <li>1. Changed – jedna z gier które bardzo lubię grać ,ale szybko się skończyła :(</li>
+        <li>2. Undertale – gra która ma fajny lore ale ma nie najlepszy fandom</li>
+        <li>3. VRChat – poznałem tu dużo ludzi, ale ostatnio nie gram z chęcią zagram kiedy będę miał czas ^_^</li>
+        <li>4. Roblox – dużo dobrych gier, ale masa nudnych kopii o Breinrotach które nie są fajne nawet do widzenia</li>
+        <li>5. Minecraft – podstawowy jest już nudny i taki szybki do pokonania ale z modami jest ciekawie i zabawnie ze znajomymi i nawet samemu</li>
+        <li>6. Terraria – niedawno zacząłem grać ale nie wiem co dalej robić i zagram gdy będę miał chęć i dużo czasu wolnego :P</li>
+      </ul>
+    </div>
+  </div>
+<!-- Wykonał ©RG -->
+
+  <!-- walone aplikacje na pulpicie -->
+  <div class="desktop-icon" style="top:40px; left:40px;" onclick="openWindow('ie')">
+    <img src="ludziki.gif" alt="IE">
+    <span>Internet Explorer</span>
+  </div>
+
+  <div class="desktop-icon" style="top:140px; left:40px;" onclick="openWindow('paint')">
+    <img src="paint.png" alt="Paint">
+    <span>Paint</span>
+  </div>
+
+  <div class="desktop-icon" style="top:240px; left:40px;" onclick="openWindow('notepad')">
+    <img src="https://media.tenor.com/Da8kTJVw16kAAAAi/changed.gif" alt="Notatnik">
+    <span>Notatnik</span>
+  </div>
+
+  <div class="desktop-icon" style="top:340px; left:40px;" onclick="openWindow('folder')">
+    <img src="open-file-folder-objects.gif" alt="Folder">
+    <span>Folder</span>
+  </div>
+
+  <div class="desktop-icon" style="top:440px; left:40px;" onclick="openWindow('saper')">
+    <img src="https://media1.tenor.com/m/JC_6pC5dhw8AAAAC/minesweeperplus-minesweeper.gif" alt="Saper">
+    <span>Saper</span>
+  </div>
+
+  <div class="desktop-icon" style="top:40px; left:160px;" onclick="openWindow('snake')">
+    <img src="https://media1.tenor.com/m/Y_0ha-x8NE8AAAAC/snake-snakes.gif" alt="Snake">
+    <span>Snake</span>
+  </div>
+
+  <div class="desktop-icon" style="top:140px; left:160px;" onclick="openWindow('calculator')">
+    <img src="https://media1.tenor.com/m/smRh3B4s8oYAAAAd/macos-calculator.gif" alt="Calc">
+    <span>Kalkulator</span>
+  </div>
+
+  <!-- Internet ExploRGer window -->
+  <div id="ie" class="window" style="left:420px;top:60px;width:520px;height:420px;">
+    <div class="titlebar"><span>Internet Explorer</span><div class="btns"><button onclick="minimizeWindow('ie')">_</button><button onclick="maximizeWindow('ie')">□</button><button onclick="closeWindow('ie')">X</button></div></div>
+    <div class="content" id="ieContent">
+      <h2 style="text-align:center">Ładowanie kotka...</h2>
+    </div>
+  </div>
+
+  <!-- Paint Paint -->
+  <div id="paint" class="window" style="left:480px;top:120px;width:600px;height:480px;">
+    <div class="titlebar"><span>Paint</span><div class="btns"><button onclick="minimizeWindow('paint')">_</button><button onclick="maximizeWindow('paint')">□</button><button onclick="closeWindow('paint')">X</button></div></div>
+    <div class="content">
+      <div class="toolbar">
+        <label>Grubość: <input id="brushSize" type="range" min="1" max="30" value="4"></label>
+        <div id="colors"></div>
+        <button onclick="clearCanvas()">Wyczyść</button>
+        <button onclick="saveImage()">Zapisz obraz</button>
+      </div>
+      <canvas id="paintCanvas"></canvas>
+    </div>
+  </div>
+
+  <!-- Notatnik czy window -->
+  <div id="notepad" class="window" style="left:80px;top:520px;width:560px;height:320px;">
+    <div class="titlebar"><span>Notatnik</span><div class="btns"><button onclick="minimizeWindow('notepad')">_</button><button onclick="maximizeWindow('notepad')">□</button><button onclick="closeWindow('notepad')">X</button></div></div>
+    <div class="content"><textarea id="notepadArea" placeholder="Pisz tutaj..."></textarea></div>
+  </div>
+
+  <!-- Folder: Informacje o dziwięć/jedenaście -->
+  <div id="folder" class="window" style="left:720px;top:60px;width:420px;height:360px;">
+    <div class="titlebar"><span>Folder</span><div class="btns"><button onclick="minimizeWindow('folder')">_</button><button onclick="maximizeWindow('folder')">□</button><button onclick="closeWindow('folder')">X</button></div></div>
+    <div class="content">
+      <div class="folder-list">
+        <div class="folder-item" onclick="openWindow('about')">O mnie</div>
+        <div class="folder-item" onclick="openWindow('games')">Gry które lubię</div>
+        <div class="folder-item" onclick="openWindow('songs')">Piosenki</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Songs placeholder zapomniałem polskiego słowa -->
+  <div id="songs" class="window" style="left:760px;top:440px;width:380px;height:260px;">
+  <div class="titlebar">
+    <span>Piosenki</span>
+    <div class="btns">
+      <button onclick="minimizeWindow('songs')">_</button>
+      <button onclick="maximizeWindow('songs')">□</button>
+      <button onclick="closeWindow('songs')">X</button>
+    </div>
+  </div>
+
+  <div class="content">
+    <p>Odtwarzacz muzyki:</p>
+
+    <div class="player-controls">
+      <button onclick="playSong()">Play</button>
+      <button onclick="stopSong()">Stop</button>
+    </div>
+<!-- poniżej można dodawać piosenki -->
+
+    <audio id="audioPlayer">
+      <source src="melodia.mp3" type="audio/mpeg">
+    </audio>
+  </div>
+</div>
+
+  <!-- Superr window -->
+  <div id="saper" class="window" style="left:40px;top:760px;width:360px;height:360px;">
+    <div class="titlebar"><span>Saper</span><div class="btns"><button onclick="minimizeWindow('saper')">_</button><button onclick="maximizeWindow('saper')">□</button><button onclick="closeWindow('saper')">X</button></div></div>
+    <div class="content"><div id="saperBoard"></div><div style="margin-top:8px"><button onclick="createSaper()">Nowa gra</button></div></div>
+  </div>
+
+  <!-- Snake window -->
+  <div id="snake" class="window" style="left:420px;top:760px;width:360px;height:360px;">
+    <div class="titlebar"><span>Snake</span><div class="btns"><button onclick="minimizeWindow('snake')">_</button><button onclick="maximizeWindow('snake')">□</button><button onclick="closeWindow('snake')">X</button></div></div>
+    <div class="content">
+      <canvas id="snakeCanvas" width="320" height="320"></canvas>
+      <div style="margin-top:8px"><button onclick="startSnake()">Start</button><button onclick="stopSnake()">Stop</button></div>
+    </div>
+  </div>
+
+  <!-- Kalkulator -->
+  <div id="calculator" class="window" style="left:800px;top:440px;width:300px;height:220px;">
+    <div class="titlebar"><span>Kalkulator</span><div class="btns"><button onclick="minimizeWindow('calculator')">_</button><button onclick="maximizeWindow('calculator')">□</button><button onclick="closeWindow('calculator')">X</button></div></div>
+    <div class="content">
+      <input id="calcInput" style="width:100%;padding:6px;margin-bottom:8px" placeholder="Wpisz działanie, np. 9+10">
+      <button onclick="calcDo()">Oblicz</button>
+      <div id="calcResult" style="margin-top:8px;font-weight:bold"></div>
+    </div>
+  </div>
+
+</div>
+// --- ©wykonał Radosław G  ---
+
+<!-- Taskbar -->
+<div id="taskbar">
+  <div class="left">
+    <button id="startBtn">Start</button>
+    <div id="taskIcons">
+      <div class="task-icon" title="Internet Explorer" onclick="openWindow('ie')"><img src="ludziki.gif" style="width:20px;height:20px"></div>
+      <div class="task-icon" title="Paint" onclick="openWindow('paint')"><img src="paint.png" style="width:20px;height:20px"></div>
+      <div class="task-icon" title="Notatnik" onclick="openWindow('notepad')"><img src="https://media.tenor.com/Da8kTJVw16kAAAAi/changed.gif" style="width:20px;height:20px"></div>
+      <div class="task-icon" title="Folder" onclick="openWindow('folder')"><img src="open-file-folder-objects.gif" style="width:20px;height:20px"></div>
+      <div class="task-icon" title="Saper" onclick="openWindow('saper')"><img src="freaky~.gif" style="width:20px;height:20px"></div>
+      <div class="task-icon" title="Snake" onclick="openWindow('snake')"><img src="https://media1.tenor.com/m/Y_0ha-x8NE8AAAAC/snake-snakes.gif" style="width:20px;height:20px"></div>
+      <div class="task-icon" title="Kalkulator" onclick="openWindow('calculator')"><img src="https://media1.tenor.com/m/smRh3B4s8oYAAAAd/macos-calculator.gif" style="width:20px;height:20px"></div>
+    </div>
+  </div>
+  <div style="display:flex;align-items:center;gap:8px">
+    <div id="clock">00:00:00</div>
+  </div>
+</div>
+
+<!-- Start Menu -->
+<div id="startMenu">
+  <h3>Start</h3>
+  <ul>
+    <li onclick="openWindow('home');toggleStartMenu()">Początek</li>
+    <li onclick="openWindow('about');toggleStartMenu()">O mnie</li>
+    <li onclick="openWindow('games');toggleStartMenu()">Gry które lubię</li>
+    <li onclick="openWindow('folder');toggleStartMenu()">Folder</li>
+  </ul>
+  <div style="margin-top:8px;display:flex;gap:8px">
+    <button id="shutdown" onclick="location.reload()">Wyłącz</button>
+  </div>
+</div>
+
+<script>
+// --- działanie piosenek chyba? ---
+const audioPlayer = document.getElementById("audioPlayer");
+
+function playSong() {
+  audioPlayer.play();
+}
+
+function stopSong() {
+  audioPlayer.pause();
+  audioPlayer.currentTime = 0;
+}
+
+// --- Start and never stop ---
+const startBtn = document.getElementById('startBtn');
+const startMenu = document.getElementById('startMenu');
+startBtn.addEventListener('click',toggleStartMenu);
+function toggleStartMenu(){startMenu.style.display = startMenu.style.display === 'block' ? 'none' : 'block'}
+
+// --- Window managnet ---
+let zIndexCounter = 100;
+function openWindow(id){
+  const el = document.getElementById(id);
+  if(!el) return;
+  el.style.display='flex';
+  el.style.zIndex = ++zIndexCounter;
+  // init app-specific
+  if(id==='ie') loadCat();
+  if(id==='paint') initPaint();
+  if(id==='saper') createSaper();
+  if(id==='snake') initSnakeCanvas();
+}
+function closeWindow(id){document.getElementById(id).style.display='none'}
+function minimizeWindow(id){document.getElementById(id).style.display='none'}
+function maximizeWindow(id){
+  const w=document.getElementById(id);
+  if(w.dataset.max==='true'){
+    w.style.width=w.dataset.w;w.style.height=w.dataset.h;w.style.left=w.dataset.l;w.style.top=w.dataset.t;w.dataset.max='false';
+  }else{
+    w.dataset.w=w.style.width;w.dataset.h=w.style.height;w.dataset.l=w.style.left;w.dataset.t=w.style.top;
+    w.style.left='0';w.style.top='0';w.style.width='100%';w.style.height='calc(100% - 40px)';w.dataset.max='true';
+  }
+}
+
+// Drowning windows
+document.querySelectorAll('.window').forEach(w=>{
+  const bar=w.querySelector('.titlebar');
+  bar.addEventListener('mousedown',e=>{
+    w.style.zIndex=++zIndexCounter;
+    const rect=w.getBoundingClientRect();
+    const ox=e.clientX-rect.left, oy=e.clientY-rect.top;
+    function mm(ev){w.style.left=(ev.clientX-ox)+'px';w.style.top=(ev.clientY-oy)+'px'}
+    function mu(){document.removeEventListener('mousemove',mm);document.removeEventListener('mouseup',mu)}
+    document.addEventListener('mousemove',mm);document.addEventListener('mouseup',mu);
+  });
+});
+
+// --- chiken ---
+setInterval(()=>{document.getElementById('clock').innerText=new Date().toLocaleTimeString()},1000);
+function loadCat(){
+  const url='https://cataas.com/cat?'+Math.random();
+  document.getElementById('ieContent').innerHTML=`<img src="${url}" alt="cat">`;
+}
+
+// --- Paint implementation zapomniałem jak się to nazywa po polsku ---
+let paintInited=false;
+function initPaint(){
+  if(paintInited) return; paintInited=true;
+  const canvas=document.getElementById('paintCanvas');
+  const ctx=canvas.getContext('2d');
+  function resize(){canvas.width=canvas.clientWidth;canvas.height=canvas.clientHeight}
+  window.addEventListener('resize',resize);resize();
+  let drawing=false; let last=null;
+  const brushSize=document.getElementById('brushSize');
+  // colors
+  const colors=['#000','#ff0000','#00aa00','#0000ff','#ffff00','#ff00ff','#00ffff'];
+  const colorsDiv=document.getElementById('colors');
+  colors.forEach(c=>{const d=document.createElement('div');d.className='color-swatch';d.style.background=c;d.onclick=()=>ctx.strokeStyle=c;colorsDiv.appendChild(d)});
+  ctx.lineCap='round';ctx.lineJoin='round';ctx.strokeStyle='#000';ctx.lineWidth=4;
+  brushSize.addEventListener('input',()=>ctx.lineWidth=brushSize.value);
+  canvas.addEventListener('mousedown',e=>{drawing=true;last=[e.offsetX,e.offsetY]});
+  canvas.addEventListener('mousemove',e=>{if(!drawing) return;ctx.beginPath();ctx.moveTo(last[0],last[1]);ctx.lineTo(e.offsetX,e.offsetY);ctx.stroke();last=[e.offsetX,e.offsetY];});
+  canvas.addEventListener('mouseup',()=>drawing=false);canvas.addEventListener('mouseleave',()=>drawing=false);
+  window.clearCanvas=()=>{ctx.clearRect(0,0,canvas.width,canvas.height)};
+  window.saveImage=()=>{const a=document.createElement('a');a.href=canvas.toDataURL();a.download='obraz.png';a.click()};
+}
+// ---© Radosław G © 0day_cat0 ---
+// --- Notak autosave ---
+const noteArea=document.getElementById('notepadArea');
+noteArea.value=localStorage.getItem('notepad') || '';
+setInterval(()=>localStorage.setItem('notepad',noteArea.value),500);
+
+// --- Saper ---
+let saperState=null;
+function createSaper(){
+  const boardDiv=document.getElementById('saperBoard');boardDiv.innerHTML='';
+  const size=8;const mines=10;let grid=[];
+  for(let y=0;y<size;y++){grid[y]=[];for(let x=0;x<size;x++){grid[y][x]={mine:false,rev:false,flag:false,count:0}}}
+  // place mines
+  let placed=0;while(placed<mines){const x=Math.floor(Math.random()*size), y=Math.floor(Math.random()*size);if(!grid[y][x].mine){grid[y][x].mine=true;placed++}}
+  // counts
+  for(let y=0;y<size;y++)for(let x=0;x<size;x++){let c=0;for(let yy=-1;yy<=1;yy++)for(let xx=-1;xx<=1;xx++){if(grid[y+yy]?.[x+xx]?.mine) c++;}grid[y][x].count=c}
+  // render
+  for(let y=0;y<size;y++){const row=document.createElement('div');row.className='saper-row';for(let x=0;x<size;x++){const cell=document.createElement('div');cell.className='saper-cell';cell.dataset.x=x;cell.dataset.y=y;cell.oncontextmenu=e=>{e.preventDefault();toggleFlag(x,y,cell)};cell.onclick=()=>reveal(x,y,cell);row.appendChild(cell)}boardDiv.appendChild(row)}
+  saperState={grid, size, mines, revealed:0, flags:0};
+}
+function toggleFlag(x,y,el){const s=saperState;const c=s.grid[y][x];if(c.rev) return; c.flag=!c.flag; el.innerText=c.flag?'🚩':''}
+function reveal(x,y,el){const s=saperState;const c=s.grid[y][x];if(c.rev||c.flag) return; c.rev=true; if(c.mine){el.style.background='red';el.innerText='💥';alert('Przegrałeś = trafiłeś na mine.');createSaper();return} el.style.background='#ddd'; if(c.count>0){el.innerText=c.count}else{ // flood fill
+  const stack=[[x,y]];while(stack.length){const [cx,cy]=stack.pop();for(let yy=-1;yy<=1;yy++)for(let xx=-1;xx<=1;xx++){const nx=cx+xx, ny=cy+yy;const nc=s.grid[ny]?.[nx]; if(nc && !nc.rev && !nc.mine){nc.rev=true; const node = document.querySelector(`.saper-cell[data-x='${nx}'][data-y='${ny}']`); if(node){node.style.background='#ddd'; if(nc.count>0) node.innerText=nc.count; else stack.push([nx,ny]); }}}}
+}
+// check win
+let rev=0; for(let yy=0;yy<s.size;yy++) for(let xx=0;xx<s.size;xx++) if(s.grid[yy][xx].rev) rev++;
+if(rev === s.size*s.size - s.mines){alert('Wygrałeś!');}
+}
+
+// --- Snake ---
+let snakeInterval=null;let snake=null;
+function initSnakeCanvas(){const canvas=document.getElementById('snakeCanvas');const ctx=canvas.getContext('2d');canvas.width=320;canvas.height=320;}
+function startSnake(){
+  if(snakeInterval) return;
+  const canvas=document.getElementById('snakeCanvas');const ctx=canvas.getContext('2d');
+  const scale=16;const cols=canvas.width/scale, rows=canvas.height/scale;
+  let dir='RIGHT';let snakeArr=[{x:5,y:10},{x:4,y:10},{x:3,y:10}];let food={x:10,y:10};
+  function placeFood(){food={x:Math.floor(Math.random()*cols),y:Math.floor(Math.random()*rows)};}
+  placeFood();
+  function draw(){ctx.fillStyle='black';ctx.fillRect(0,0,canvas.width,canvas.height);ctx.fillStyle='lime';snakeArr.forEach(s=>ctx.fillRect(s.x*scale,s.y*scale,scale-1,scale-1));ctx.fillStyle='red';ctx.fillRect(food.x*scale,food.y*scale,scale-1,scale-1)}
+  function step(){
+    const head={x:snakeArr[0].x, y:snakeArr[0].y};
+    if(dir==='LEFT') head.x--;
+    if(dir==='RIGHT') head.x++;
+    if(dir==='UP') head.y--;
+    if(dir==='DOWN') head.y++;
+    // wrap
+    if(head.x<0) head.x=cols-1;if(head.x>=cols)head.x=0;if(head.y<0)head.y=rows-1;if(head.y>=rows)head.y=0;
+    // collision
+    if(snakeArr.some(s=>s.x===head.x && s.y===head.y)){stopSnake();alert('Koniec gry!');return}
+    snakeArr.unshift(head);
+    if(head.x===food.x && head.y===food.y){placeFood()}else{snakeArr.pop()}
+    draw();
+  }
+  document.addEventListener('keydown',kd);
+  function kd(e){if(e.key==='ArrowLeft' && dir!=='RIGHT')dir='LEFT';if(e.key==='ArrowRight' && dir!=='LEFT')dir='RIGHT';if(e.key==='ArrowUp' && dir!=='DOWN')dir='UP';if(e.key==='ArrowDown' && dir!=='UP')dir='DOWN'}
+  snakeInterval=setInterval(step,120);
+}
+function stopSnake(){clearInterval(snakeInterval);snakeInterval=null}
+
+// --- Kalkulator ---
+function calcDo() {
+  const input = document.getElementById('calcInput').value.trim();
+
+  if (!input) {
+    document.getElementById('calcResult').innerText = 'Podaj działanie.';
+    return;
+  }
+
+  try {
+    if (!/^[0-9+\-*/(). \t]+$/.test(input)) {
+      document.getElementById('calcResult').innerText = 'Nie wiem ile to jest.';
+      return;
+    }
+
+    const val = Function('return (' + input + ')')();
+
+    // losowość w odpowiedziach — NAPRAWIONA
+    const rand = Math.random();
+    let msg = '';
+
+    if (rand < 0.15)
+      msg = '🙏jesteś z tym sam🙏';
+    else if (rand < 0.30)
+      msg = 'chyba 21';
+    else if (rand < 0.45)
+      msg = 'hmm...';
+    else if (rand < 0.60)
+      msg = 'nwm 15 może 37';
+    else if (rand < 0.75)
+      msg = '🔥Tak🔥';
+    else if (rand < 0.90)
+      msg = 'Hello World!';
+    else
+      msg = 'Wynik: ' + val;
+
+    document.getElementById('calcResult').innerText = msg;
+
+  } catch (e) {
+    document.getElementById('calcResult').innerText = 'Nie rozumiem tego działania.';
+  }
+}
+// init: show home
+openWindow('home');
+</script>
+</body>
+</html>
