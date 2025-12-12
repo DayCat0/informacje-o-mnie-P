@@ -62,7 +62,7 @@ body{margin:0;font-family:Tahoma, Verdana, Arial;background:url("https://media1.
 .folder-item{padding:6px;border:1px solid #ddd;background:#f6f6f6;border-radius:4px;cursor:pointer}
 @media (max-width:700px){.window{width:90%;height:65%}}
 
-/* glitch & deathXP styles (dodatkowe efekty) */
+
 .glitchEffect {
     animation: glitchAnim 0.2s infinite;
     background: #111;
@@ -259,17 +259,10 @@ body{margin:0;font-family:Tahoma, Verdana, Arial;background:url("https://media1.
   </div>
 
   <div class="content">
-    <p>Odtwarzacz muzyki:</p>
-
-    <div class="player-controls">
-      <button onclick="playSong()">Play</button>
-      <button onclick="stopSong()">Stop</button>
-    </div>
 <!-- poniżej można dodawać piosenki -->
 
-    <audio id="audioPlayer">
-      <source src="melodia.mp3" type="audio/mpeg">
-    </audio>
+    <p>Spokojna melodyjka:</p>
+    <audio src="melodia.mp3" controls></audio>
   </div>
 </div>
 
@@ -487,14 +480,13 @@ function startSnake(){ if(snakeInterval) return;
     if(e.key==='ArrowUp' && dir!=='DOWN') dir='UP';
     if(e.key==='ArrowDown' && dir!=='UP') dir='DOWN';
   }
-  // upewnij się, że nie dodajemy wielokrotnie tego samego listenera
+ 
   document.removeEventListener('keydown', kd);
   document.addEventListener('keydown', kd);
   snakeInterval = setInterval(step,120);
 }
 function stopSnake(){ if(snakeInterval) clearInterval(snakeInterval); snakeInterval=null; document.removeEventListener('keydown', ()=>{}); }
 
-/* --- Kalkulator (zachowano oryginalne "śmieszne" odpowiedzi) --- */
 function calcDo() {
   const inputEl = $id('calcInput');
   const resultEl = $id('calcResult');
@@ -518,12 +510,12 @@ function calcDo() {
   }
 }
 
-/* --- Przydatne funkcje --- */
+
 function randomIP() {
   return `${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}`;
 }
 
-/* --- CMD (jedno miejsce z wszystkimi komendami) --- */
+
 let xpVirusActive = false;
 
 function playJumpscareSound() {
