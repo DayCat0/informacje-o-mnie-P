@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pl">
 <head>
@@ -6,6 +5,19 @@
 <title>Hewo ^_^</title>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <style>
+  .shakeEffect {
+    animation: shakeAnim 0.1s infinite;
+}
+
+@keyframes shakeAnim {
+    0%   { transform: translate(1px, 1px); }
+    20%  { transform: translate(-1px, 0px); }
+    40%  { transform: translate(2px, -1px); }
+    60%  { transform: translate(-2px, 1px); }
+    80%  { transform: translate(1px, -2px); }
+    100% { transform: translate(0px, 1px); }
+}
+
 *{box-sizing:border-box}
 body{margin:0;font-family:Tahoma, Verdana, Arial;background:url("https://media1.tenor.com/m/8X6lieAy46cAAAAd/microhard-bliss-grass.gif") center center fixed;background-size:cover;overflow:hidden}
 .desktop{position:relative;width:100%;height:calc(100vh - 40px)}
@@ -49,6 +61,37 @@ body{margin:0;font-family:Tahoma, Verdana, Arial;background:url("https://media1.
 .folder-list{display:flex;flex-direction:column;gap:8px}
 .folder-item{padding:6px;border:1px solid #ddd;background:#f6f6f6;border-radius:4px;cursor:pointer}
 @media (max-width:700px){.window{width:90%;height:65%}}
+
+/* glitch & deathXP styles (dodatkowe efekty) */
+.glitchEffect {
+    animation: glitchAnim 0.2s infinite;
+    background: #111;
+    color: #0ff;
+}
+
+@keyframes glitchAnim {
+    0% { transform: translate(1px, -1px); filter: hue-rotate(0deg); }
+    25% { transform: translate(-2px, 2px); filter: hue-rotate(45deg); }
+    50% { transform: translate(2px, -2px); filter: hue-rotate(90deg); }
+    75% { transform: translate(-1px, 1px); filter: hue-rotate(180deg); }
+    100% { transform: translate(0,0); filter: hue-rotate(0deg); }
+}
+
+.deathXP {
+    background: #300 !important;
+    color: #f00 !important;
+    animation: deathFlash 0.5s infinite alternate;
+}
+
+@keyframes deathFlash {
+    from { background:#200; }
+    to   { background:#400; }
+}
+@keyframes deathPulse {
+    from { filter: brightness(0.6) saturate(4); }
+    to   { filter: brightness(1.2) saturate(8); }
+}
+
 </style>
 </head>
 <body>
@@ -68,17 +111,41 @@ body{margin:0;font-family:Tahoma, Verdana, Arial;background:url("https://media1.
     </div>
   </div>
 
+<div id="cmd" class="window" style="left:200px; top:200px; width:600px; height:350px;">
+    <div class="titlebar">
+        <span>CMD</span>
+        <div class="btns">
+            <button onclick="minimizeWindow('cmd')">_</button>
+            <button onclick="maximizeWindow('cmd')">□</button>
+            <button onclick="closeWindow('cmd')">X</button>
+        </div>
+    </div>
+
+    <div id="cmdWindow" style="background:#000; color:#0f0; font-family:monospace; padding:10px; display:flex; flex-direction:column; gap:8px;">
+      <div id="cmd-output" style="min-height:200px; max-height:300px; overflow-y:auto;"></div>
+
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span style="color:#0f0">C:\></span>
+        <input id="cmd-input" type="text"
+            style="background:#000;color:#0f0;border:none;outline:none;width:80%;"
+            onkeydown="if(event.key==='Enter') runCMD()">
+      </div>
+    </div>
+</div>
+
   <div id="about" class="window" style="left:140px;top:140px;">
     <div class="titlebar"><span>O mnie</span><div class="btns"><button onclick="minimizeWindow('about')">_</button><button onclick="maximizeWindow('about')">□</button><button onclick="closeWindow('about')">X</button></div></div>
     <div class="content">
       <h2>Hejo!</h2>
       <p>Mam na imię Radek interesuje się informatyką i budowaniem komputerów i ich naprawianiem.</p>
-      <p>często naprawiam komputery i nie tylko, lubię pomagać innym ludziom w jaki kolwiek możliwy sposób jaki mogę ale jestem overthinker i czasami mogę się zapytać za dużo przez co mogę spowodować że druga osoba może się poczuć nie komfortowo 3:</p>
+      <p>często naprawiam komputery i nie tylko, lubię pomagać innym ludziom w jaki kolwiek możliwy sposób jaki mogę ale jestem overthinker i czasami mogę spytać za dużo przez co mogę spowodować że druga osoba może się poczuć nie komfortowo 3:</p>
       <p>jestem introwertykiem lecz lubię rozmawiać z ludżmi, nie lubię gdy jest zbyt głośno lub zbyt tłocznie, nie wiem czemu ale prawie zawsze się martwię o swoich znajomych. Lubię styl Frutiger Aero i retro stron z lat 2000 bardzo lubię też i muzykę elektroniczną, rock i metal w sumie to lubię prawie wszystkie gatunki muzyczne oprócz rapu mam złe wspomnienia z rapem.</p>
       <p>lubię kodować (ale nie zawsze), oglądać różne filmy i seriale tylko muszę je oglądać z kimś bo za bardzo samemu nie lubię oglądać czuje się w tedy samotnie i pusto gdy to oglądam</p>
       <p>moim ulubionym filmem jest "Harry Potter i kamień filozoficzny" i moim ulubionym serialem jest Rick and Morty tak samo jak wyspa totalnej porażki. Bardzo fajnie się mi je oglądało kiedyś ale teraz są słabo dostępne 3:</p>
       <p>mam dysleksje i często się mylę w pisaniu i czytaniu więc jak będę z tobą pisał i zrobię błąd proszę nie wytykaj tego palcem że ten błąd zrobiłem to bardzo nie miłe </p>
+<p>jeszcze jedno lubię dawać ester eggi jak chodzi o jakiego typu pracy więc może coś znajdziesz</p>
       <p>Bardzo dziękuje za przeczytanie życzę tobie miłego dnia :3</p>
+     
      <p>©Radosław G</p>
     </div>
   </div>
@@ -133,6 +200,12 @@ body{margin:0;font-family:Tahoma, Verdana, Arial;background:url("https://media1.
     <img src="https://media1.tenor.com/m/smRh3B4s8oYAAAAd/macos-calculator.gif" alt="Calc">
     <span>Kalkulator</span>
   </div>
+
+<div class="desktop-icon" style="top:540px; left:40px;" onclick="openWindow('cmd')">
+  <img src="CMD.png" alt="CMD">
+  <span>CMD</span>
+</div>
+
 
   <!-- Internet ExploRGer window -->
   <div id="ie" class="window" style="left:420px;top:60px;width:520px;height:420px;">
@@ -227,7 +300,6 @@ body{margin:0;font-family:Tahoma, Verdana, Arial;background:url("https://media1.
   </div>
 
 </div>
-// --- ©wykonał Radosław G  ---
 
 <!-- Taskbar -->
 <div id="taskbar">
@@ -242,6 +314,9 @@ body{margin:0;font-family:Tahoma, Verdana, Arial;background:url("https://media1.
       <div class="task-icon" title="Snake" onclick="openWindow('snake')"><img src="https://media1.tenor.com/m/Y_0ha-x8NE8AAAAC/snake-snakes.gif" style="width:20px;height:20px"></div>
       <div class="task-icon" title="Kalkulator" onclick="openWindow('calculator')"><img src="https://media1.tenor.com/m/smRh3B4s8oYAAAAd/macos-calculator.gif" style="width:20px;height:20px"></div>
     </div>
+<div class="task-icon" title="CMD" onclick="openWindow('cmd')">
+    <img src="CMD.png" alt="CMD" style="width:20px;height:20px">
+</div>
   </div>
   <div style="display:flex;align-items:center;gap:8px">
     <div id="clock">00:00:00</div>
@@ -263,41 +338,37 @@ body{margin:0;font-family:Tahoma, Verdana, Arial;background:url("https://media1.
 </div>
 
 <script>
-// --- działanie piosenek chyba? ---
-const audioPlayer = document.getElementById("audioPlayer");
+/* --- Bezpieczne referencje do elementów (jeśli czegoś nie ma — kod nie padnie) --- */
+function $id(id){ return document.getElementById(id); }
 
-function playSong() {
-  audioPlayer.play();
-}
+/* --- działanie piosenek --- */
+const audioPlayerEl = $id("audioPlayer");
+function playSong() { try{ audioPlayerEl && audioPlayerEl.play && audioPlayerEl.play(); }catch(e){} }
+function stopSong() { try{ if(audioPlayerEl){ audioPlayerEl.pause(); audioPlayerEl.currentTime = 0; } }catch(e){} }
 
-function stopSong() {
-  audioPlayer.pause();
-  audioPlayer.currentTime = 0;
-}
+/* --- Start menu --- */
+const startBtn = $id('startBtn');
+const startMenu = $id('startMenu');
+if(startBtn) startBtn.addEventListener('click',toggleStartMenu);
+function toggleStartMenu(){ if(!startMenu) return; startMenu.style.display = startMenu.style.display === 'block' ? 'none' : 'block'}
 
-// --- Start and never stop ---
-const startBtn = document.getElementById('startBtn');
-const startMenu = document.getElementById('startMenu');
-startBtn.addEventListener('click',toggleStartMenu);
-function toggleStartMenu(){startMenu.style.display = startMenu.style.display === 'block' ? 'none' : 'block'}
-
-// --- Window managnet ---
+/* okna */
 let zIndexCounter = 100;
 function openWindow(id){
-  const el = document.getElementById(id);
+  const el = $id(id);
   if(!el) return;
   el.style.display='flex';
   el.style.zIndex = ++zIndexCounter;
-  // init app-specific
   if(id==='ie') loadCat();
   if(id==='paint') initPaint();
   if(id==='saper') createSaper();
   if(id==='snake') initSnakeCanvas();
 }
-function closeWindow(id){document.getElementById(id).style.display='none'}
-function minimizeWindow(id){document.getElementById(id).style.display='none'}
+function closeWindow(id){ const el=$id(id); if(el) el.style.display='none' }
+function minimizeWindow(id){ const el=$id(id); if(el) el.style.display='none' }
 function maximizeWindow(id){
-  const w=document.getElementById(id);
+  const w=$id(id);
+  if(!w) return;
   if(w.dataset.max==='true'){
     w.style.width=w.dataset.w;w.style.height=w.dataset.h;w.style.left=w.dataset.l;w.style.top=w.dataset.t;w.dataset.max='false';
   }else{
@@ -306,151 +377,464 @@ function maximizeWindow(id){
   }
 }
 
-// Drowning windows
+/* drag windows - tylko okna które mają .titlebar (unikamy przypadkowych zagnieżdżeń) */
 document.querySelectorAll('.window').forEach(w=>{
   const bar=w.querySelector('.titlebar');
+  if(!bar) return;
   bar.addEventListener('mousedown',e=>{
     w.style.zIndex=++zIndexCounter;
     const rect=w.getBoundingClientRect();
     const ox=e.clientX-rect.left, oy=e.clientY-rect.top;
-    function mm(ev){w.style.left=(ev.clientX-ox)+'px';w.style.top=(ev.clientY-oy)+'px'}
-    function mu(){document.removeEventListener('mousemove',mm);document.removeEventListener('mouseup',mu)}
-    document.addEventListener('mousemove',mm);document.addEventListener('mouseup',mu);
+    function mm(ev){ w.style.left=(ev.clientX-ox)+'px'; w.style.top=(ev.clientY-oy)+'px'; }
+    function mu(){ document.removeEventListener('mousemove',mm); document.removeEventListener('mouseup',mu); }
+    document.addEventListener('mousemove',mm); document.addEventListener('mouseup',mu);
   });
 });
 
-// --- chiken ---
-setInterval(()=>{document.getElementById('clock').innerText=new Date().toLocaleTimeString()},1000);
-function loadCat(){
-  const url='https://cataas.com/cat?'+Math.random();
-  document.getElementById('ieContent').innerHTML=`<img src="${url}" alt="cat">`;
-}
+/* clock */
+setInterval(()=>{ const c=$id('clock'); if(c) c.innerText=new Date().toLocaleTimeString(); },1000);
 
-// --- Paint implementation zapomniałem jak się to nazywa po polsku ---
+/* cat loader */
+function loadCat(){ const el=$id('ieContent'); if(!el) return; const url='https://cataas.com/cat?'+Math.random(); el.innerHTML=`<img src="${url}" alt="cat">`; }
+
+/* --- Paint --- */
 let paintInited=false;
 function initPaint(){
   if(paintInited) return; paintInited=true;
-  const canvas=document.getElementById('paintCanvas');
+  const canvas=$id('paintCanvas'); if(!canvas) return;
   const ctx=canvas.getContext('2d');
-  function resize(){canvas.width=canvas.clientWidth;canvas.height=canvas.clientHeight}
-  window.addEventListener('resize',resize);resize();
+  function resize(){ canvas.width = canvas.clientWidth; canvas.height = canvas.clientHeight; drawPreview(); }
+  window.addEventListener('resize',resize); resize();
   let drawing=false; let last=null;
-  const brushSize=document.getElementById('brushSize');
-  // colors
+  const brushSize=$id('brushSize');
   const colors=['#000','#ff0000','#00aa00','#0000ff','#ffff00','#ff00ff','#00ffff'];
-  const colorsDiv=document.getElementById('colors');
-  colors.forEach(c=>{const d=document.createElement('div');d.className='color-swatch';d.style.background=c;d.onclick=()=>ctx.strokeStyle=c;colorsDiv.appendChild(d)});
+  const colorsDiv=$id('colors');
+  if(colorsDiv) colors.forEach(c=>{const d=document.createElement('div');d.className='color-swatch';d.style.background=c;d.onclick=()=>ctx.strokeStyle=c;colorsDiv.appendChild(d)});
   ctx.lineCap='round';ctx.lineJoin='round';ctx.strokeStyle='#000';ctx.lineWidth=4;
-  brushSize.addEventListener('input',()=>ctx.lineWidth=brushSize.value);
-  canvas.addEventListener('mousedown',e=>{drawing=true;last=[e.offsetX,e.offsetY]});
-  canvas.addEventListener('mousemove',e=>{if(!drawing) return;ctx.beginPath();ctx.moveTo(last[0],last[1]);ctx.lineTo(e.offsetX,e.offsetY);ctx.stroke();last=[e.offsetX,e.offsetY];});
-  canvas.addEventListener('mouseup',()=>drawing=false);canvas.addEventListener('mouseleave',()=>drawing=false);
-  window.clearCanvas=()=>{ctx.clearRect(0,0,canvas.width,canvas.height)};
-  window.saveImage=()=>{const a=document.createElement('a');a.href=canvas.toDataURL();a.download='obraz.png';a.click()};
-}
-// ---© Radosław G © 0day_cat0 ---
-// --- Notak autosave ---
-const noteArea=document.getElementById('notepadArea');
-noteArea.value=localStorage.getItem('notepad') || '';
-setInterval(()=>localStorage.setItem('notepad',noteArea.value),500);
+  if(brushSize) brushSize.addEventListener('input',()=>ctx.lineWidth=brushSize.value);
+  canvas.addEventListener('mousedown',e=>{ drawing=true; last=[e.offsetX,e.offsetY]; });
+  canvas.addEventListener('mousemove',e=>{ if(!drawing) return; ctx.beginPath(); ctx.moveTo(last[0],last[1]); ctx.lineTo(e.offsetX,e.offsetY); ctx.stroke(); last=[e.offsetX,e.offsetY]; });
+  canvas.addEventListener('mouseup',()=>drawing=false);
+  canvas.addEventListener('mouseleave',()=>drawing=false);
+  window.clearCanvas = ()=>{ ctx.clearRect(0,0,canvas.width,canvas.height); };
+  window.saveImage = ()=>{ const a=document.createElement('a'); a.href=canvas.toDataURL(); a.download='obraz.png'; a.click(); };
 
-// --- Saper ---
+  function drawPreview(){
+    // nic specjalnego, tylko upewnienie się że tło blanco
+    ctx.fillStyle = '#fff';
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+  }
+}
+
+/* --- Notatnik autosave --- */
+const noteArea = $id('notepadArea');
+if(noteArea){
+  noteArea.value = localStorage.getItem('notepad') || '';
+  setInterval(()=>localStorage.setItem('notepad',noteArea.value),500);
+}
+
+/* --- Saper (Minesweeper) --- */
 let saperState=null;
 function createSaper(){
-  const boardDiv=document.getElementById('saperBoard');boardDiv.innerHTML='';
-  const size=8;const mines=10;let grid=[];
-  for(let y=0;y<size;y++){grid[y]=[];for(let x=0;x<size;x++){grid[y][x]={mine:false,rev:false,flag:false,count:0}}}
-  // place mines
-  let placed=0;while(placed<mines){const x=Math.floor(Math.random()*size), y=Math.floor(Math.random()*size);if(!grid[y][x].mine){grid[y][x].mine=true;placed++}}
-  // counts
-  for(let y=0;y<size;y++)for(let x=0;x<size;x++){let c=0;for(let yy=-1;yy<=1;yy++)for(let xx=-1;xx<=1;xx++){if(grid[y+yy]?.[x+xx]?.mine) c++;}grid[y][x].count=c}
-  // render
-  for(let y=0;y<size;y++){const row=document.createElement('div');row.className='saper-row';for(let x=0;x<size;x++){const cell=document.createElement('div');cell.className='saper-cell';cell.dataset.x=x;cell.dataset.y=y;cell.oncontextmenu=e=>{e.preventDefault();toggleFlag(x,y,cell)};cell.onclick=()=>reveal(x,y,cell);row.appendChild(cell)}boardDiv.appendChild(row)}
+  const boardDiv=$id('saperBoard'); if(!boardDiv) return;
+  boardDiv.innerHTML='';
+  const size=8; const mines=10; let grid=[];
+  for(let y=0;y<size;y++){ grid[y]=[]; for(let x=0;x<size;x++){ grid[y][x]={mine:false,rev:false,flag:false,count:0} } }
+  let placed=0; while(placed<mines){ const x=Math.floor(Math.random()*size), y=Math.floor(Math.random()*size); if(!grid[y][x].mine){ grid[y][x].mine=true; placed++; } }
+  for(let y=0;y<size;y++) for(let x=0;x<size;x++){ let c=0; for(let yy=-1;yy<=1;yy++) for(let xx=-1;xx<=1;xx++) if(grid[y+yy]?.[x+xx]?.mine) c++; grid[y][x].count=c; }
+  for(let y=0;y<size;y++){ const row=document.createElement('div'); row.className='saper-row';
+    for(let x=0;x<size;x++){
+      const cell=document.createElement('div'); cell.className='saper-cell'; cell.dataset.x=x; cell.dataset.y=y;
+      cell.oncontextmenu = e=>{ e.preventDefault(); toggleFlag(x,y,cell); };
+      cell.onclick = ()=> reveal(x,y,cell);
+      row.appendChild(cell);
+    }
+    boardDiv.appendChild(row);
+  }
   saperState={grid, size, mines, revealed:0, flags:0};
 }
-function toggleFlag(x,y,el){const s=saperState;const c=s.grid[y][x];if(c.rev) return; c.flag=!c.flag; el.innerText=c.flag?'🚩':''}
-function reveal(x,y,el){const s=saperState;const c=s.grid[y][x];if(c.rev||c.flag) return; c.rev=true; if(c.mine){el.style.background='red';el.innerText='💥';alert('Przegrałeś = trafiłeś na mine.');createSaper();return} el.style.background='#ddd'; if(c.count>0){el.innerText=c.count}else{ // flood fill
-  const stack=[[x,y]];while(stack.length){const [cx,cy]=stack.pop();for(let yy=-1;yy<=1;yy++)for(let xx=-1;xx<=1;xx++){const nx=cx+xx, ny=cy+yy;const nc=s.grid[ny]?.[nx]; if(nc && !nc.rev && !nc.mine){nc.rev=true; const node = document.querySelector(`.saper-cell[data-x='${nx}'][data-y='${ny}']`); if(node){node.style.background='#ddd'; if(nc.count>0) node.innerText=nc.count; else stack.push([nx,ny]); }}}}
-}
-// check win
-let rev=0; for(let yy=0;yy<s.size;yy++) for(let xx=0;xx<s.size;xx++) if(s.grid[yy][xx].rev) rev++;
-if(rev === s.size*s.size - s.mines){alert('Wygrałeś!');}
+function toggleFlag(x,y,el){ const s=saperState; if(!s) return; const c=s.grid[y][x]; if(c.rev) return; c.flag=!c.flag; el.innerText=c.flag?'🚩':''; }
+function reveal(x,y,el){ const s=saperState; if(!s) return; const c=s.grid[y][x]; if(c.rev||c.flag) return; c.rev=true; if(c.mine){ el.style.background='red'; el.innerText='💥'; alert('Przegrałeś = trafiłeś na mine.'); createSaper(); return; } el.style.background='#ddd'; if(c.count>0){ el.innerText=c.count } else { const stack=[[x,y]]; while(stack.length){ const [cx,cy]=stack.pop(); for(let yy=-1;yy<=1;yy++) for(let xx=-1;xx<=1;xx++){ const nx=cx+xx, ny=cy+yy; const nc=s.grid[ny]?.[nx]; if(nc && !nc.rev && !nc.mine){ nc.rev=true; const node=document.querySelector(`.saper-cell[data-x='${nx}'][data-y='${ny}']`); if(node){ node.style.background='#ddd'; if(nc.count>0) node.innerText=nc.count; else stack.push([nx,ny]); } } } } }
+  let rev=0; for(let yy=0;yy<s.size;yy++) for(let xx=0;xx<s.size;xx++) if(s.grid[yy][xx].rev) rev++;
+  if(rev === s.size*s.size - s.mines){ alert('Wygrałeś!'); }
 }
 
-// --- Snake ---
-let snakeInterval=null;let snake=null;
-function initSnakeCanvas(){const canvas=document.getElementById('snakeCanvas');const ctx=canvas.getContext('2d');canvas.width=320;canvas.height=320;}
-function startSnake(){
-  if(snakeInterval) return;
-  const canvas=document.getElementById('snakeCanvas');const ctx=canvas.getContext('2d');
-  const scale=16;const cols=canvas.width/scale, rows=canvas.height/scale;
-  let dir='RIGHT';let snakeArr=[{x:5,y:10},{x:4,y:10},{x:3,y:10}];let food={x:10,y:10};
-  function placeFood(){food={x:Math.floor(Math.random()*cols),y:Math.floor(Math.random()*rows)};}
+/* --- Snake --- */
+let snakeInterval = null;
+function initSnakeCanvas(){ const canvas=$id('snakeCanvas'); if(!canvas) return; const ctx=canvas.getContext('2d'); canvas.width=320; canvas.height=320; ctx.fillStyle='black'; ctx.fillRect(0,0,canvas.width,canvas.height); }
+function startSnake(){ if(snakeInterval) return;
+  const canvas=$id('snakeCanvas'); if(!canvas) return; const ctx=canvas.getContext('2d');
+  const scale=16; const cols=Math.floor(canvas.width/scale), rows=Math.floor(canvas.height/scale);
+  let dir='RIGHT'; let snakeArr=[{x:5,y:10},{x:4,y:10},{x:3,y:10}]; let food={x:10,y:10};
+  function placeFood(){ food={x:Math.floor(Math.random()*cols), y:Math.floor(Math.random()*rows)}; }
   placeFood();
-  function draw(){ctx.fillStyle='black';ctx.fillRect(0,0,canvas.width,canvas.height);ctx.fillStyle='lime';snakeArr.forEach(s=>ctx.fillRect(s.x*scale,s.y*scale,scale-1,scale-1));ctx.fillStyle='red';ctx.fillRect(food.x*scale,food.y*scale,scale-1,scale-1)}
+  function draw(){ ctx.fillStyle='black'; ctx.fillRect(0,0,canvas.width,canvas.height); ctx.fillStyle='lime'; snakeArr.forEach(s=>ctx.fillRect(s.x*scale,s.y*scale,scale-1,scale-1)); ctx.fillStyle='red'; ctx.fillRect(food.x*scale,food.y*scale,scale-1,scale-1); }
   function step(){
     const head={x:snakeArr[0].x, y:snakeArr[0].y};
     if(dir==='LEFT') head.x--;
     if(dir==='RIGHT') head.x++;
     if(dir==='UP') head.y--;
     if(dir==='DOWN') head.y++;
-    // wrap
-    if(head.x<0) head.x=cols-1;if(head.x>=cols)head.x=0;if(head.y<0)head.y=rows-1;if(head.y>=rows)head.y=0;
-    // collision
-    if(snakeArr.some(s=>s.x===head.x && s.y===head.y)){stopSnake();alert('Koniec gry!');return}
+    if(head.x<0) head.x=cols-1; if(head.x>=cols) head.x=0; if(head.y<0) head.y=rows-1; if(head.y>=rows) head.y=0;
+    if(snakeArr.some(s=>s.x===head.x && s.y===head.y)){ stopSnake(); alert('Koniec gry!'); return; }
     snakeArr.unshift(head);
-    if(head.x===food.x && head.y===food.y){placeFood()}else{snakeArr.pop()}
+    if(head.x===food.x && head.y===food.y){ placeFood(); } else { snakeArr.pop(); }
     draw();
   }
-  document.addEventListener('keydown',kd);
-  function kd(e){if(e.key==='ArrowLeft' && dir!=='RIGHT')dir='LEFT';if(e.key==='ArrowRight' && dir!=='LEFT')dir='RIGHT';if(e.key==='ArrowUp' && dir!=='DOWN')dir='UP';if(e.key==='ArrowDown' && dir!=='UP')dir='DOWN'}
-  snakeInterval=setInterval(step,120);
+  function kd(e){
+    if(e.key==='ArrowLeft' && dir!=='RIGHT') dir='LEFT';
+    if(e.key==='ArrowRight' && dir!=='LEFT') dir='RIGHT';
+    if(e.key==='ArrowUp' && dir!=='DOWN') dir='UP';
+    if(e.key==='ArrowDown' && dir!=='UP') dir='DOWN';
+  }
+  // upewnij się, że nie dodajemy wielokrotnie tego samego listenera
+  document.removeEventListener('keydown', kd);
+  document.addEventListener('keydown', kd);
+  snakeInterval = setInterval(step,120);
 }
-function stopSnake(){clearInterval(snakeInterval);snakeInterval=null}
+function stopSnake(){ if(snakeInterval) clearInterval(snakeInterval); snakeInterval=null; document.removeEventListener('keydown', ()=>{}); }
 
-// --- Kalkulator ---
+/* --- Kalkulator (zachowano oryginalne "śmieszne" odpowiedzi) --- */
 function calcDo() {
-  const input = document.getElementById('calcInput').value.trim();
-
-  if (!input) {
-    document.getElementById('calcResult').innerText = 'Podaj działanie.';
-    return;
-  }
-
+  const inputEl = $id('calcInput');
+  const resultEl = $id('calcResult');
+  if(!inputEl || !resultEl) return;
+  const input = inputEl.value.trim();
+  if (!input) { resultEl.innerText = 'Podaj działanie.'; return; }
   try {
-    if (!/^[0-9+\-*/(). \t]+$/.test(input)) {
-      document.getElementById('calcResult').innerText = 'Nie wiem ile to jest.';
-      return;
-    }
-
+    if (!/^[0-9+\-*/(). \t]+$/.test(input)) { resultEl.innerText = 'Nie wiem ile to jest.'; return; }
     const val = Function('return (' + input + ')')();
-
-    // losowość w odpowiedziach — NAPRAWIONA
-    const rand = Math.random();
-    let msg = '';
-
-    if (rand < 0.15)
-      msg = '🙏jesteś z tym sam🙏';
-    else if (rand < 0.30)
-      msg = 'chyba 21';
-    else if (rand < 0.45)
-      msg = 'hmm...';
-    else if (rand < 0.60)
-      msg = 'nwm 15 może 37';
-    else if (rand < 0.75)
-      msg = '🔥Tak🔥';
-    else if (rand < 0.90)
-      msg = 'Hello World!';
-    else
-      msg = 'Wynik: ' + val;
-
-    document.getElementById('calcResult').innerText = msg;
-
+    const rand = Math.random(); let msg = '';
+    if (rand < 0.15) msg = '🙏jesteś z tym sam🙏';
+    else if (rand < 0.30) msg = 'chyba 21';
+    else if (rand < 0.45) msg = 'hmm...';
+    else if (rand < 0.60) msg = 'nwm 15 może 37';
+    else if (rand < 0.75) msg = '🔥Tak🔥';
+    else if (rand < 0.80) msg = 'Hello World!';
+    else msg = 'Wynik: ' + val;
+    resultEl.innerText = msg;
   } catch (e) {
-    document.getElementById('calcResult').innerText = 'Nie rozumiem tego działania.';
+    resultEl.innerText = 'Nie rozumiem tego działania.';
   }
 }
-// init: show home
+
+/* --- Przydatne funkcje --- */
+function randomIP() {
+  return `${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}`;
+}
+
+/* --- CMD (jedno miejsce z wszystkimi komendami) --- */
+let xpVirusActive = false;
+
+function playJumpscareSound() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const bufferSize = ctx.sampleRate * 1.2;
+    const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) {
+      const t = i / bufferSize;
+      const noise = (Math.random() * 2 - 1) * Math.pow(1 - t, 2);
+      data[i] = noise * (1 - Math.exp(-50 * t));
+    }
+    const src = ctx.createBufferSource();
+    src.buffer = buffer;
+    const gain = ctx.createGain();
+    gain.gain.setValueAtTime(0.0001, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(1.5, ctx.currentTime + 0.02);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.9);
+    src.connect(gain).connect(ctx.destination);
+    src.start();
+  } catch (e) {}
+}
+
+function showJumpscareOverlay() {
+  const ov = document.createElement('div');
+  ov.id = 'jumpscareOverlay';
+  ov.style.position = 'fixed';
+  ov.style.inset = '0';
+  ov.style.background = 'radial-gradient(circle at 30% 30%, rgba(255,0,0,0.98), rgba(0,0,0,0.95))';
+  ov.style.zIndex = '9999999';
+  ov.style.display = 'flex';
+  ov.style.alignItems = 'center';
+  ov.style.justifyContent = 'center';
+  ov.style.flexDirection = 'column';
+  ov.style.color = '#fff';
+  ov.style.fontFamily = 'Impact, sans-serif';
+  ov.style.textAlign = 'center';
+  ov.style.fontSize = '6vw';
+  ov.style.letterSpacing = '2px';
+  ov.style.transform = 'scale(0.8)';
+  ov.style.animation = 'jampulse 0.45s ease-in-out 0s 4 alternate';
+  ov.innerHTML = '<div style="font-size:10vh">!!!</div><div style="font-size:6vh">DEATH XP</div>';
+  const style = document.createElement('style');
+  style.textContent = '@keyframes jampulse { from { transform: scale(0.85) rotate(-2deg); filter: hue-rotate(0deg) saturate(8); } to { transform: scale(1.05) rotate(2deg); filter: hue-rotate(30deg) saturate(12) blur(0.5px); } }';
+  document.head.appendChild(style);
+  document.body.appendChild(ov);
+  playJumpscareSound();
+  setTimeout(() => {
+    ov.remove();
+    style.remove();
+  }, 1600);
+}
+
+function applyXPVirus() {
+  xpVirusActive = true;
+  document.body.style.background = '#300';
+  document.body.style.backgroundImage = 'linear-gradient(180deg, rgba(80,0,0,0.6), rgba(20,0,0,0.9))';
+  document.body.style.filter = 'saturate(6) contrast(1.1)';
+  document.querySelectorAll('.window').forEach(w => {
+    w.style.background = '#400';
+    w.style.borderColor = '#990000';
+    w.style.color = '#ffaaaa';
+  });
+}
+
+function restoreFromXPVirus() {
+  xpVirusActive = false;
+  document.body.style.background = '';
+  document.body.style.backgroundImage = '';
+  document.body.style.filter = '';
+  document.querySelectorAll('.window').forEach(w => {
+    w.style.background = '';
+    w.style.borderColor = '';
+    w.style.color = '';
+  });
+}
+
+function runCMD() {
+    const input = $id("cmd-input");
+    const output = $id("cmd-output");
+    if (!input || !output) return;
+
+    const cmd = (input.value || "").trim().toLowerCase();
+    output.innerHTML = "";
+
+    // wypisujemy wpisaną komendę od góry
+    output.innerHTML += `<div style="color:#0f0">C:\\> ${escapeHtml(cmd)}</div>`;
+    input.value = "";
+  input.focus();
+
+  if (cmd === "help") {
+    output.innerHTML += `
+      <div>- help — lista komend</div>
+      <div>- clear / cls — czyści ekran</div>
+      <div>- ipconfig — pokazuje IP</div>
+      <div>- dir — lista plików</div>
+      <div>- ping [adres] — pinguje adres</div>
+      <div>- hostname — nazwa komputera</div>
+      <div>- ver — wersja systemu</div>
+      <div>- systeminfo — informacje o systemie</div>
+      <div>- date — data</div>
+      <div>- echo [tekst] — tekst :O</div>
+      <div>- xpvirus </div>
+      <div>- bluescreen </div>
+      <div>- shake </div>
+      <div>- glitch </div>
+      <div>- deathxp </div>
+      <div>- sl — pociąg</div>
+    `;
+  } else if (cmd === "clear" || cmd === "cls") {
+    output.innerHTML = "";
+  } else if (cmd === "ipconfig") {
+    output.innerHTML += `
+      <div>Windows IP Configuration</div><br>
+      <div>Ethernet adapter Local Area Connection:</div>
+      <div>   IPv4 Address. . . . . . . . . . . : ${randomIP()}</div>
+      <div>   Subnet Mask . . . . . . . . . . . : 255.255.255.0</div>
+      <div>   Default Gateway . . . . . . . . . : ${randomIP()}</div>
+    `;
+  } else if (cmd === "dir") {
+    output.innerHTML += `
+      <div> Volume in drive C has no label.</div>
+      <div> Directory of C:\\</div><br>
+      <div>04/01/2008  12:00 AM    <DIR>          Windows</div>
+      <div>04/01/2008  12:00 AM    <DIR>          Users</div>
+      <div>04/01/2008  12:00 AM    <DIR>          Program Files</div>
+      <div>04/01/2008  12:00 AM    912,384        autoexec.bat</div>
+      <div>04/01/2008  12:00 AM     24,190        config.sys</div>
+    `;
+  } else if (cmd.startsWith("ping ")) {
+    const target = cmd.split(" ")[1] || '127.0.0.1';
+    output.innerHTML += `
+      <div>Pinging ${escapeHtml(target)} with 32 bytes of data:</div>
+      <div>Reply from ${randomIP()}: bytes=32 time=${Math.floor(Math.random()*100)}ms TTL=128</div>
+      <div>Reply from ${randomIP()}: bytes=32 time=${Math.floor(Math.random()*100)}ms TTL=128</div>
+      <div>Reply from ${randomIP()}: bytes=32 time=${Math.floor(Math.random()*100)}ms TTL=128</div>
+    `;
+  } else if (cmd === "hostname") {
+    output.innerHTML += `<div>Czarny Pracownik-PC</div>`;
+  } else if (cmd === "ver") {
+    output.innerHTML += `<div>Microsoft Windows XP [Version 5.1.2600]</div>`;
+  } else if (cmd === "systeminfo") {
+    output.innerHTML += `
+      <div>Host Name:                 GiggaNiga-PC</div>
+      <div>OS Name:                   Microsoft Windows XP Professional</div>
+      <div>OS Version:                5.1.2600 Service Pack 3</div>
+      <div>System Manufacturer:       ACME Corp</div>
+      <div>System Model:              Virtual Machine</div>
+      <div>Processor(s):              1 x Intel(R) Core(TM)</div>
+    `;
+  } else if (cmd === "date") {
+    output.innerHTML += `<div>${new Date().toLocaleDateString()}</div>`;
+  } else if (cmd.startsWith("echo ")) {
+    output.innerHTML += `<div>${escapeHtml(raw.slice(5))}</div>`;
+  } else if (cmd === "xpvirus") {
+    output.innerHTML += "<div style='color:red;'>XP VIRUS Starting</div>";
+
+    const body = document.body;
+    const oldBg = body.style.background;
+    const oldBgImg = body.style.backgroundImage;
+    const oldFilter = body.style.filter;
+
+    body.style.background = "#300";
+    body.style.backgroundImage = "url('bloodxp.jpg')";
+    body.style.backgroundSize = "cover";
+    body.style.filter = "hue-rotate(-50deg) saturate(4)";
+
+    document.querySelectorAll('.window').forEach(w => {
+        w.dataset.oldBg = w.style.background;
+        w.dataset.oldBorder = w.style.borderColor;
+        w.style.background = "#400";
+        w.style.borderColor = "#900";
+    });
+
+    const cmdWin = document.getElementById("cmdWindow");
+    if (cmdWin) {
+        cmdWin.dataset.oldBg = cmdWin.style.background;
+        cmdWin.dataset.oldColor = cmdWin.style.color;
+        cmdWin.style.background = "#200";
+        cmdWin.style.color = "#f33";
+    }
+}
+ 
+ else if (cmd === "bluescreen") {
+    input.disabled = true;
+    const bsod = document.createElement("div");
+    bsod.style.position = "fixed";
+    bsod.style.top = "0";
+    bsod.style.left = "0";
+    bsod.style.width = "100%";
+    bsod.style.height = "100%";
+    bsod.style.background = "#0000AA";
+    bsod.style.color = "white";
+    bsod.style.fontFamily = "Consolas, monospace";
+    bsod.style.fontSize = "18px";
+    bsod.style.padding = "40px";
+    bsod.style.zIndex = "999999";
+    bsod.innerHTML = `
+      <b>A problem has been detected and Windows has been shut down...</b><br><br>
+      *** STOP: 0x0000007B<br><br>
+      Dumping physical memory: <span id="dumpProgress">0%</span>
+    `;
+    document.body.appendChild(bsod);
+    let progress = 0;
+    const interval = setInterval(() => {
+      progress++;
+      const dp = document.getElementById("dumpProgress");
+      if (dp) dp.innerText = progress + "%";
+      if (progress >= 100) {
+        clearInterval(interval);
+        setTimeout(() => {
+          bsod.remove();
+          input.disabled = false;
+          output.innerHTML += "<div>System recovered.</div>";
+        }, 800);
+      }
+    }, 30);
+  } else if (cmd === "shake") {
+    output.innerHTML += `<div>RAT SHAKER!</div>`;
+    const w = document.getElementById("cmdWindow");
+    if (w) w.classList.add("shakeEffect");
+    setTimeout(() => { if (w) w.classList.remove("shakeEffect"); }, 2000);
+  } else if (cmd === "glitch") {
+    output.innerHTML += "<div>GLITCH MODE ENABLED</div>";
+    const w = document.getElementById("cmdWindow");
+    if (w) w.classList.add("glitchEffect");
+    setTimeout(() => { if (w) w.classList.remove("glitchEffect"); output.innerHTML += "<div>Glitch stabilized.</div>"; }, 3000);
+ 
+ } else if (cmd === "deathxp") {
+
+    output.innerHTML += "<div style='color:red;'>Heh sam to sobie zrobiłes/aś xD</div>";
+    showJumpscareOverlay();
+    setTimeout(() => {
+      output.innerHTML += "<div style='color:lime'>System stabilized (after jump).</div>";
+    }, 1800);
+
+  } else if (cmd === "sl") {
+    const outputArea = output;
+    outputArea.innerHTML += "<div>Steam Locomotive starting...</div>";
+    const trainASCII =
+`      ====        ________               
+  _D _|  |_______/        \\__I_I_____===__
+   |(_)---  |   H\\________/ |   |        =
+   /     |  |   H  |  |     |   |         |
+  |      |  |   H  |__|     |   |         |
+  | ________|___H__/__\\_____|___|________|
+  |/ |   |-----------I-----I--------------|
+__/  |___| |___I_____I_____I_____I_______|
+ |   |   | |    |     |     |     |      |
+_|___|___|_|____|_____|_____|_____|______|
+(O) (O)    (O)    (O)   (O)   (O)    (O)
+`;
+    const smokeFrames = [
+      "     (   )",
+      "    (     )",
+      "  (  (   )  )",
+      "   (       )",
+      "    (     )",
+      "     (   )",
+      "      ( )",
+      " "
+    ];
+    const train = document.createElement("pre");
+    train.style.position = "fixed";
+    train.style.top = "150px";
+    train.style.left = "100vw";
+    train.style.whiteSpace = "pre";
+    train.style.color = "#0f0";
+    train.style.fontSize = "12px";
+    train.style.fontFamily = "monospace";
+    train.style.zIndex = "99999";
+    train.innerText = trainASCII;
+    document.body.appendChild(train);
+    const smoke = document.createElement("pre");
+    smoke.style.position = "fixed";
+    smoke.style.top = "100px";
+    smoke.style.left = "100vw";
+    smoke.style.color = "#0f0";
+    smoke.style.fontSize = "12px";
+    smoke.style.fontFamily = "monospace";
+    smoke.style.zIndex = "99999";
+    document.body.appendChild(smoke);
+    let x = window.innerWidth;
+    let smokeIndex = 0;
+    const interval = setInterval(() => {
+      x -= 8;
+      train.style.left = x + "px";
+      smoke.style.left = (x + 40) + "px";
+      smoke.innerText = smokeFrames[smokeIndex];
+      smokeIndex = (smokeIndex + 1) % smokeFrames.length;
+      if (x < -500) {
+        clearInterval(interval);
+        document.body.removeChild(train);
+        document.body.removeChild(smoke);
+        outputArea.innerHTML += "<div>Steam Locomotive exited.</div>";
+      }
+    }, 50);
+  } else {
+    output.innerHTML += `<div>'${escapeHtml(raw)}' is not recognized.</div>`;
+  }
+
+  output.scrollTop = output.scrollHeight;
+  input.focus();
+}
+function escapeHtml(str){
+  if(!str && str!==0) return '';
+  return String(str).replace(/[&<>"']/g, function(m){ return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[m]; });
+}
+
+
 openWindow('home');
 </script>
 </body>
